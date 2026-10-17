@@ -1,0 +1,24 @@
+title: Malicious Macro/Executable Quarantined at Mail Gateway
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220008
+status: experimental
+description: Detects the Proxmox Mail Gateway / iRedMail stack (bend 6 and 27, Account 3) quarantining a macro-enabled document or executable attachment, indicating an active phishing attempt against the organization.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1566/001/
+logsource:
+    category: mail_gateway
+detection:
+    selection:
+        action: 'quarantine'
+        attachment_type:
+            - 'macro'
+            - 'exe'
+            - 'hta'
+    condition: selection
+falsepositives:
+    - Internal test phishing campaign run by the security team itself
+level: medium
+tags:
+    - attack.initial_access
+    - attack.t1566.001

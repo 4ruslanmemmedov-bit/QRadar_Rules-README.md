@@ -1,0 +1,21 @@
+title: Suricata/Zeek NIDS High-Severity Alert
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220003
+status: experimental
+description: Forwards and escalates high/critical severity Suricata alerts (exploit kits, known malware signatures, ET-Open critical rules) captured at the DMZ/Server VLAN boundary (bend 23, Account 1).
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1190/
+logsource:
+    category: ids
+    product: suricata
+detection:
+    selection:
+        alert.severity: 1
+    condition: selection
+falsepositives:
+    - Noisy signature requiring tuning (track FP rate per signature ID before suppressing)
+level: high
+tags:
+    - attack.initial_access
+    - attack.t1190

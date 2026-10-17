@@ -1,0 +1,23 @@
+title: WAF Block Bypass Attempt via Header Manipulation
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220002
+status: experimental
+description: Detects repeated requests from a source that was previously blocked by country/User-Agent rules on the WAF (bend 10, Account 3) suddenly succeeding, suggesting header spoofing to bypass the block.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1090/
+logsource:
+    category: waf
+    product: sucuri
+detection:
+    selection_blocked:
+        action: 'blocked'
+    selection_allowed:
+        action: 'allowed'
+    condition: selection_blocked and selection_allowed | by src_ip
+falsepositives:
+    - Shared NAT/proxy IP used by multiple legitimate users
+level: medium
+tags:
+    - attack.defense_evasion
+    - attack.t1090

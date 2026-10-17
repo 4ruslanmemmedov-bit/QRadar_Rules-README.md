@@ -1,0 +1,22 @@
+title: Repeated MFA Failures Against SSO (Keycloak/Authentik)
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220005
+status: experimental
+description: Detects an account receiving many consecutive MFA challenge failures on the IAM platform (bend 29, Account 1), consistent with MFA fatigue / brute-force attacks against SAML/OIDC SSO.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1621/
+logsource:
+    category: authentication
+    product: keycloak
+detection:
+    selection:
+        event_type: 'mfa_failure'
+    timeframe: 5m
+    condition: selection | count() by username > 5
+falsepositives:
+    - User who lost their authenticator device retrying repeatedly
+level: high
+tags:
+    - attack.credential_access
+    - attack.t1621

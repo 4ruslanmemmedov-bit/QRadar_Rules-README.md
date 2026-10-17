@@ -1,0 +1,20 @@
+title: Critical Vulnerability Identified by Nightly Scan
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220009
+status: experimental
+description: Surfaces a Critical/CVSS 9+ finding from the nightly Acunetix/Nessus scan of the web server (bend 19, Account 3) so it is tracked as an actionable SOC item rather than buried in a report.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1190/
+logsource:
+    category: vulnerability_scan
+detection:
+    selection:
+        severity: 'Critical'
+    condition: selection
+falsepositives:
+    - Duplicate finding already tracked from a previous scan cycle (dedupe by CVE + asset)
+level: medium
+tags:
+    - attack.initial_access
+    - attack.t1190

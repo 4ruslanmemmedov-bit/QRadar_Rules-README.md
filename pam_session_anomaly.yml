@@ -1,0 +1,24 @@
+title: PAM Session Bypass or Direct RDP/SSH Attempt
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220004
+status: experimental
+description: Detects a direct RDP/SSH connection attempt to a server that should only be reachable through the PAM gateway (Teleport/Guacamole, bend 25, Account 1), indicating the privileged-access control was bypassed.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1021/001/
+logsource:
+    category: firewall
+detection:
+    selection:
+        dst_port:
+            - 3389
+            - 22
+        src_ip|not_in: 'PAM_GATEWAY_IP'
+        dst_zone: 'Server_VLAN'
+    condition: selection
+falsepositives:
+    - Emergency break-glass access performed by an authorized admin outside PAM
+level: high
+tags:
+    - attack.lateral_movement
+    - attack.t1021.001

@@ -1,0 +1,24 @@
+title: Cross-VLAN Traffic Violating Segmentation Policy
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220001
+status: experimental
+description: Detects traffic from Client VLAN directly reaching Server VLAN without passing through the expected jump point, violating the segmentation design (bend 23, Account 1). Originally intended for QRadar; validated via Splunk due to QRadar being unreachable.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1021/
+logsource:
+    category: firewall
+detection:
+    selection:
+        src_zone: 'Client_VLAN'
+        dst_zone: 'Server_VLAN'
+        action: 'allow'
+    filter_pam:
+        dst_ip: 'PAM_GATEWAY_IP'
+    condition: selection and not filter_pam
+falsepositives:
+    - Misconfigured firewall rule still allowing legitimate maintenance traffic
+level: high
+tags:
+    - attack.lateral_movement
+    - attack.t1021

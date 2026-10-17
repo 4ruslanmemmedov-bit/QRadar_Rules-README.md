@@ -1,0 +1,29 @@
+title: Abnormal Domain Controller Replication Request
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220006
+status: experimental
+description: Detects a replication request (DCSync-style, directory replication service) originating from a host that is not a recognized Domain Controller (DC01/DC02, bend 1), a classic credential-theft technique.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1003/006/
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4662
+        Properties|contains:
+            - '1131f6aa-9c07-11d1-f79f-00c04fc2dcd2'
+            - '1131f6ad-9c07-11d1-f79f-00c04fc2dcd2'
+    filter_known_dc:
+        SubjectUserName|endswith: '$'
+        ComputerName|contains:
+            - 'DC01'
+            - 'DC02'
+    condition: selection and not filter_known_dc
+falsepositives:
+    - Legitimate backup software authorized for directory replication (bend 2)
+level: critical
+tags:
+    - attack.credential_access
+    - attack.t1003.006

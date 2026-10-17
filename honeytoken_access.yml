@@ -1,0 +1,23 @@
+title: Canarytoken / Honeytoken Account or File Accessed
+id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220007
+status: experimental
+description: Detects any authentication or file-access event involving a planted honeytoken (e.g. sqladmin account, userpasswords.txt, bend 11/Account 1). Any hit is a high-confidence true positive since no legitimate process should ever touch these.
+author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
+date: 2026/10/16
+references:
+    - https://attack.mitre.org/techniques/T1556/
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        TargetUserName: 'sqladmin'
+    selection_file:
+        ObjectName|contains: 'userpasswords.txt'
+    condition: selection or selection_file
+falsepositives:
+    - None expected - treat every hit as a real incident
+level: critical
+tags:
+    - attack.credential_access
+    - attack.t1556
