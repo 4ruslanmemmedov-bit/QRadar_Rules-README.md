@@ -1,23 +1,22 @@
-title: WAF Block Bypass Attempt via Header Manipulation
+title: WAF Allowed Request From Geo-Blocked Country
 id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220002
 status: experimental
-description: Detects repeated requests from a source that was previously blocked by country/User-Agent rules on the WAF (bend 10, Account 3) suddenly succeeding, suggesting header spoofing to bypass the block.
+description: Detects a request from a country that the WAF policy blocks (e.g. Armenia, bend 10, Account 3) that was nevertheless allowed, indicating a bypass of the geo rule. Field names (country_code, action) are assumed.
 author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
-date: 2026/10/16
+date: 2026/10/17
 references:
     - https://attack.mitre.org/techniques/T1090/
 logsource:
     category: waf
     product: sucuri
 detection:
-    selection_blocked:
-        action: 'blocked'
-    selection_allowed:
+    selection:
         action: 'allowed'
-    condition: selection_blocked and selection_allowed | by src_ip
+        country_code: 'AM'
+    condition: selection
 falsepositives:
-    - Shared NAT/proxy IP used by multiple legitimate users
-level: medium
+    - Temporary exception to the geo rule approved by the team
+level: high
 tags:
-    - attack.defense_evasion
+    - attack.defense-evasion
     - attack.t1090
