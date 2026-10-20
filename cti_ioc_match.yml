@@ -1,7 +1,7 @@
 title: Outbound Connection Matches OpenCTI Threat Intelligence IOC
 id: 7a1c2e10-0a1a-4e1a-9b1a-bb2222220010
 status: experimental
-description: Detects an internal host communicating with an IP/domain that OpenCTI (bend 16, fed by AbuseIPDB/MISP) has tagged as malicious, confirming compromise and triggering the automated blocking playbook.
+description: Detects an internal host communicating with an IP/domain that OpenCTI (bend 16, fed by AbuseIPDB, AlienVault, MISP) flagged with confidence > 80.
 author: Ruslan Mammadov - BlueTeam Account 2 (SOC)
 date: 2026/10/16
 references:
@@ -10,7 +10,8 @@ logsource:
     category: network_connection
 detection:
     selection:
-        dest_ip|cti_match: 'cti_intel'
+        index: 'cti_intel'
+        threat_match: 'true'
     condition: selection
 falsepositives:
     - Stale/expired IOC still present in the CTI feed (check IOC age before auto-blocking via SOAR)
